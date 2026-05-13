@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ස්වර්ණ හංස ජාතකය</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      color: white;
+      font-family: 'Noto Sans Sinhala', sans-serif;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 1;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 9999;
+    }
+
+    .title img {
+      width: 50px;
+      height: auto;
+      margin: 0 10px;
+    }
+
+    #container {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow: hidden;
+    }
+
+    .overlay-gif {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    #playButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: 2px solid white;
+      padding: 15px 30px;
+      font-size: 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 10000;
+      display: none; /* initially hidden */
+    }
+
+    #playButton:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h2 id="title" class="title">
+    <img src="lo.png" alt="Emoji">
+    ස්වර්ණ හංස ජාතකය
+    <img src="lo.png" alt="Emoji">
+  </h2>
+
+  <div id="container">
+    <img id="background" src="bg.png" alt="Background">
+
+    <!-- Overlays --> 
+    <img class="overlay-gif" src="maina.gif" alt="maingif">    
+  </div>
+
+  <!-- Play Button -->
+  <button id="playButton">▶️</button>
+
+  <!-- Audio -->
+  <audio id="backgroundAudio" loop>
+    <source src="audio.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const audio = document.getElementById("backgroundAudio");
+    const playBtn = document.getElementById("playButton");
+
+    // Try to play automatically after animations
+    function tryPlayAudio() {
+      audio.play().then(() => {
+        console.log("Audio playing successfully");
+        playBtn.style.display = "none";
+      }).catch(err => {
+        console.log("Autoplay blocked:", err);
+        playBtn.style.display = "block"; // Show button if autoplay fails
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        // Title fade out
+        document.getElementById("title").style.opacity = "0";
+
+        setTimeout(() => {
+          document.getElementById("title").style.display = "none";
+
+          // Show overlays
+          document.querySelectorAll('.overlay-gif').forEach(overlay => {
+            overlay.style.opacity = '1';
+          });
+
+          // Bring title back
+          setTimeout(() => {
+            const title = document.getElementById("title");
+            title.style.display = "flex";
+            title.style.opacity = "1";
+            title.style.position = "relative";
+            title.style.top = "10px";
+            title.style.left = "auto";
+            title.style.transform = "none";
+          }, 1000);
+
+          // Try to play audio
+          tryPlayAudio();
+
+        }, 1500);
+      }, 1000);
+    });
+
+    // When user clicks the play button
+    playBtn.addEventListener('click', () => {
+      audio.play().then(() => {
+        playBtn.style.display = "none";
+      }).catch(err => {
+        console.error("Play failed:", err);
+      });
+    });
+  </script>
+
+</body>
+</html>
